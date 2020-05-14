@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as yup from "yup";
-// import axios from "axios";
+import axios from "axios";
 
 const formSchema = yup.object().shape({
   name: yup.string().required("Name is a required field"),
@@ -15,7 +15,10 @@ const formSchema = yup.object().shape({
   terms: yup.boolean().oneOf([true], "You must accept Terms and Conditions"),
 });
 
-export default function Form() {
+export default function Form(props) {
+
+  
+
   // managing state for our form inputs
   const [formState, setFormState] = useState({
     name: "",
@@ -57,7 +60,7 @@ export default function Form() {
   const inputChange = (e) => {
     e.persist();
     console.log("input changed!", e.target.value, e.target.checked);
-    // validate(e);
+    validate(e);
     let value =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;
     setFormState({ ...formState, [e.target.name]: value });
@@ -66,10 +69,13 @@ export default function Form() {
   const formSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted!");
-    // axios
-    //   .post("https://reqres.in/api/users", formState)
-    //   .then((response) => console.log(response))
-    //   .catch((err) => console.log(err));
+    axios
+      .post("https://reqres.in/api/users", formState)
+      .then((response) => {
+        console.log(props.addUser)
+        props.addUser(response.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -116,6 +122,7 @@ export default function Form() {
           onChange={inputChange}
         ></input>
         Terms and Conditions
+        {errors.terms.length>0? (<p className="error">{errors.terms}</p>):null}
       </label>
       <button>Submit</button>
     </form>
