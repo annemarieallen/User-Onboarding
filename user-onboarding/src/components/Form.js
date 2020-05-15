@@ -16,9 +16,6 @@ const formSchema = yup.object().shape({
 });
 
 export default function Form(props) {
-
-  
-
   // managing state for our form inputs
   const [formState, setFormState] = useState({
     name: "",
@@ -35,35 +32,34 @@ export default function Form(props) {
   });
 
   const validate = (e) => {
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
     yup
       .reach(formSchema, e.target.name)
-      .validate(e.target.value)
-      .then(valid => {
-        setErrors({ 
-          ...errors, 
-          [e.target.name]: ""
+      .validate(value)
+      .then((valid) => {
+        setErrors({
+          ...errors,
+          [e.target.name]: "",
+        });
+      })
+      .catch((err) => {
+        setErrors({
+          ...errors,
+          [e.target.name]: err.errors[0],
+        });
       });
-  })
-  .catch(err => {
-    setErrors({
-      ...errors,
-      [e.target.name]: err.errors[0]
+    setFormState({
+      ...formState,
+      [e.target.name]: value,
     });
-  });
-  setFormState({
-    ...formState,
-    [e.target.name]: e.target.value
-  });
-};
+  };
 
   // onChange function
   const inputChange = (e) => {
     e.persist();
     console.log("input changed!", e.target.value, e.target.checked);
     validate(e);
-    let value =
-      e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    setFormState({ ...formState, [e.target.name]: value });
   };
 
   const formSubmit = (e) => {
@@ -72,7 +68,7 @@ export default function Form(props) {
     axios
       .post("https://reqres.in/api/users", formState)
       .then((response) => {
-        console.log(props.addUser)
+        console.log(props.addUser);
         props.addUser(response.data);
       })
       .catch((err) => console.log(err));
@@ -101,7 +97,9 @@ export default function Form(props) {
           value={formState.email}
           onChange={inputChange}
         ></input>
-        {errors.email.lenth>0 ? (<p className ="error">{errors.email}</p>):null}
+        {errors.email.lenth > 0 ? (
+          <p className="error">{errors.email}</p>
+        ) : null}
       </label>
       <label htmlFor="password">
         Password
@@ -111,7 +109,9 @@ export default function Form(props) {
           id="password"
           placeholder="password"
         ></input>
-        {errors.password.length>8 ? (<p className = "error">{errors.password}</p>): null}
+        {errors.password.length > 8 ? (
+          <p className="error">{errors.password}</p>
+        ) : null}
       </label>
       <label htmlFor="terms">
         <input
@@ -122,9 +122,12 @@ export default function Form(props) {
           onChange={inputChange}
         ></input>
         Terms and Conditions
-        {errors.terms.length>0? (<p className="error">{errors.terms}</p>):null}
+        {errors.terms.length > 0 ? (
+          <p className="error">{errors.terms}</p>
+        ) : null}
       </label>
       <button>Submit</button>
+      <pre>{JSON.stringify(props.formUsers, null, 2)}</pre>
     </form>
   );
 }

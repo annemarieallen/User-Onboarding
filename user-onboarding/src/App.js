@@ -5,7 +5,7 @@ import Form from "./components/Form";
 function App() {
   const [users, setUsers] = useState([]);
 
-  // addUser is a function – pass this user as a prop 
+  // addUser is a function – pass user as a prop 
   const addUser = (user) => {
     const newUser = {
       name: user.name,
@@ -15,11 +15,12 @@ function App() {
     };
     setUsers([...users, newUser]);
   };
-
+console.log(users);
   return (
     <div className="App">
       <h1> Welcome! </h1>
-      <Form />
+      <Form addUser={addUser} formUsers={users}/>
+      
     </div>
   );
 }
