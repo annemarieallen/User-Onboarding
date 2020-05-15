@@ -31,6 +31,7 @@ export default function Form(props) {
     terms: "",
   });
 
+  // anytime you're working with checkboxes, the value will be called value, not e.target.value
   const validate = (e) => {
     const value =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;
@@ -127,6 +128,7 @@ export default function Form(props) {
         ) : null}
       </label>
       <button>Submit</button>
+      {/* can also call this in the App.js replacing props.formUsers with users (shown in comments) */}
       <pre>{JSON.stringify(props.formUsers, null, 2)}</pre>
     </form>
   );

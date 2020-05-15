@@ -20,7 +20,7 @@ console.log(users);
     <div className="App">
       <h1> Welcome! </h1>
       <Form addUser={addUser} formUsers={users}/>
-      
+      {/* <pre>{JSON.stringify(users, null, 2)}</pre> */}
     </div>
   );
 }
